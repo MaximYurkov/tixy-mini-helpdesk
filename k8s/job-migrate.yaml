@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: backend-migrate
+  namespace: mini-helpdesk
+spec:
+  backoffLimit: 2  #если миграция упадёт, попробует максимум 2 раза
+  template:
+    spec:
+      restartPolicy: Never
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:16
+          envFrom:
+            - secretRef:
+                name: pg-secret
+            - configMapRef:
+                name: pg-config
+          command:
+            - sh
+            - -c
+            - |
+              until pg_isready -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER}; do
+                echo "waiting for postgres..."
+                sleep 2
+              done
+      containers:
+        - name: migrate
+          image: mini-helpdesk-backend:1.1
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - configMapRef:
+                name: backend-env
+          command: ["python", "manage.py", "migrate", "--noinput"]

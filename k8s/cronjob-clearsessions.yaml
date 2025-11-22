@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backend-clearsessions
+  namespace: mini-helpdesk
+spec:
+  schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: clearsessions
+              image: mini-helpdesk-backend:1.2
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef: { name: backend-config }
+                - configMapRef: { name: backend-env }
+              command: ["python","manage.py","clearsessions"]

@@ -1,0 +1,7 @@
+django
+djangorestframework
+strawberry-graphql
+django-cors-headers
+python-dotenv
+psycopg2-binary
+dj-database-url
