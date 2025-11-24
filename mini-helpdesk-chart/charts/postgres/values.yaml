@@ -1,0 +1,12 @@
+enabled: true
+
+image: postgres:16
+serviceName: postgres-service
+port: 5432
+
+storage: 1Gi
+
+db:
+  name: helpdesk
+  user: appuser
+  password: apppass

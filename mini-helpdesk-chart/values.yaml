@@ -1,0 +1,32 @@
+namespace: mini-helpdesk
+
+backend:
+  image:
+    repository: mini-helpdesk-backend
+    tag: "1.1"
+    pullPolicy: Never
+  service:
+    type: NodePort
+    port: 8000
+    nodePort: 30080
+  env:
+    DJANGO_DEBUG: "True"
+    DJANGO_ALLOWED_HOSTS: "*"
+    SECRET_KEY: "dev-secret-key"
+    DATABASE_URL: "postgres://appuser:apppass@postgres-service:5432/helpdesk"
+
+postgres:
+  enabled: true
+  image: postgres:16
+  serviceName: postgres-service
+  port: 5432
+  storage: 1Gi
+  db:
+    name: helpdesk
+    user: appuser
+    password: apppass
+
+ingress:
+  enabled: true
+  host: mini-helpdesk.local
+  path: /api

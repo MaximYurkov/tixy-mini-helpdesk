@@ -1,0 +1,16 @@
+server:
+  standalone:
+    enabled: true
+  ha:
+    enabled: false
+
+ui:
+  enabled: true
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+    - host: vault.local
+      paths:
+        - /

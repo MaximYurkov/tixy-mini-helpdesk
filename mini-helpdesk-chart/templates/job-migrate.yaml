@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-migrate"
+  namespace: {{ .Values.namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+
+      initContainers:
+        - name: wait-for-postgres
+          image: {{ .Values.postgres.image }}
+          command:
+            - sh
+            - -c
+            - >
+              until pg_isready -h {{ .Values.postgres.serviceName }} -p {{ .Values.postgres.port }} -U {{ .Values.postgres.db.user }};
+              do echo waiting for postgres; sleep 2; done
+          env:
+            - name: PGPASSWORD
+              value: "{{ .Values.postgres.db.password }}"
+
+      containers:
+        - name: migrate
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          env:
+            - name: DJANGO_DEBUG
+              value: "{{ .Values.backend.env.DJANGO_DEBUG }}"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "{{ .Values.backend.env.DJANGO_ALLOWED_HOSTS }}"
+            - name: DATABASE_URL
+              value: "{{ .Values.backend.env.DATABASE_URL }}"
+            - name: SECRET_KEY
+              value: "{{ .Values.backend.env.SECRET_KEY }}"
+          command: ["python","manage.py","migrate","--noinput"]
