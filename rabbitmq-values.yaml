@@ -1,0 +1,14 @@
+auth:
+  username: ref+vault://minihelpdesk/rabbitmq#USERNAME
+  password: ref+vault://minihelpdesk/rabbitmq#PASSWORD
+
+image:
+  registry: docker.io
+  repository: rabbitmq
+  tag: 3.13-management
+
+service:
+  type: LoadBalancer
+
+ingress:
+  enabled: false
