@@ -12,8 +12,11 @@ backend:
   env:
     DJANGO_DEBUG: "True"
     DJANGO_ALLOWED_HOSTS: "*"
-    SECRET_KEY: "dev-secret-key"
+    SECRET_KEY: "dev-secret-key"  
     DATABASE_URL: "postgres://appuser:apppass@postgres-service:5432/helpdesk"
+    RABBITMQ_HOST: "rabbitmq.mini-helpdesk.svc.cluster.local"
+    RABBITMQ_PORT: "5672"
+    RABBITMQ_VHOST: "/"
 
 postgres:
   enabled: true
@@ -30,3 +33,10 @@ ingress:
   enabled: true
   host: mini-helpdesk.local
   path: /api
+
+celery:
+  worker:
+    replicas: 1
+  flower:
+    enabled: true
+    port: 5555
