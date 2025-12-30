@@ -1,0 +1,14 @@
+image:
+  repository: redis/redis-stack-server
+  tag: "7.2.0"
+  pullPolicy: IfNotPresent
+
+service:
+  port: 6379
+
+auth:
+  password: ref+vault://minihelpdesk/redis#REDIS_PASSWORD
+
+persistence:
+  enabled: true
+  size: 1Gi

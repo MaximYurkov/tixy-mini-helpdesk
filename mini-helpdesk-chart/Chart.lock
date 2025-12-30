@@ -11,5 +11,11 @@ dependencies:
 - name: flower
   repository: file://charts/flower
   version: 0.1.0
-digest: sha256:726273f90121ec008f3a400f747c60a9ed9b2ac6c8fbc659563bf58b6c73a9fc
-generated: "2025-12-30T19:43:38.7653789+03:00"
+- name: redis
+  repository: file://charts/redis
+  version: 0.1.0
+- name: redis-insight
+  repository: file://charts/redis-insight
+  version: 0.1.0
+digest: sha256:0dd6e403bacb264e755e71ca2b88ac14ff675f259539a945f1a1265fcaa8eb88
+generated: "2025-12-30T21:36:46.7394782+03:00"

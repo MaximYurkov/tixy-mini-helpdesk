@@ -1,0 +1,6 @@
+apiVersion: v2
+name: redis-insight
+description: Redis Insight UI
+type: application
+version: 0.1.0
+appVersion: "2.58"

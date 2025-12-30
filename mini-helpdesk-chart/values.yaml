@@ -28,6 +28,9 @@ backend:
     RABBITMQ_PORT: "5672"
     RABBITMQ_VHOST: "/"
 
+    REDIS_HOST: "{{ .Release.Name }}-redis.{{ .Release.Namespace }}.svc.cluster.local"
+    REDIS_PORT: "6379"
+
   secrets:
     SECRET_KEY: ref+vault://minihelpdesk/backend#SECRET_KEY
     DB_PASSWORD: ref+vault://minihelpdesk/postgres#POSTGRES_PASSWORD
