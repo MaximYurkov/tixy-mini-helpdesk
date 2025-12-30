@@ -1,0 +1,22 @@
+image:
+  repository: mini-helpdesk-backend
+  tag: "1.1"
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 8000
+
+configMapName: backend-env
+secretName: backend-secret
+
+env:
+  DJANGO_DEBUG: "True"
+  DJANGO_ALLOWED_HOSTS: "*"
+  DATABASE_URL: "postgres://appuser:apppass@postgres-service:5432/helpdesk"
+  RABBITMQ_HOST: "rabbitmq.mini-helpdesk.svc.cluster.local"
+  RABBITMQ_PORT: "5672"
+  RABBITMQ_VHOST: "/"
+
+secrets:
+  SECRET_KEY: ref+vault://minihelpdesk/backend#SECRET_KEY

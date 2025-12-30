@@ -1,0 +1,49 @@
+{{- if .Values.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "flower.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: flower
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flower
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: flower
+    spec:
+      containers:
+        - name: flower
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.envConfigMap }}
+            - secretRef:
+                name: {{ .Values.envSecret }}
+          command: ["celery"]
+          args:
+            - "-A"
+            - "rmq.celery_app"
+            - "flower"
+            - "--port={{ .Values.service.port }}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "flower.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: flower
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      nodePort: {{ .Values.service.nodePort }}
+{{- end }}

@@ -1,0 +1,13 @@
+enabled: true
+
+image:
+  repository: mini-helpdesk-backend
+  tag: "1.1"
+  pullPolicy: Never
+
+service:
+  port: 5555
+  nodePort: 30555
+
+envConfigMap: backend-env
+envSecret: backend-secret

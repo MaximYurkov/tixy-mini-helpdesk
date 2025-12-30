@@ -5,29 +5,52 @@ backend:
     repository: mini-helpdesk-backend
     tag: "1.1"
     pullPolicy: Never
+
   service:
     type: NodePort
     port: 8000
     nodePort: 30080
+
+  configMapName: backend-env
+  secretName: backend-secret
+
   env:
-    DJANGO_DEBUG: "True"
+    DJANGO_DEBUG: "False"
     DJANGO_ALLOWED_HOSTS: "*"
-    SECRET_KEY: "dev-secret-key"  
-    DATABASE_URL: "postgres://appuser:apppass@postgres-service:5432/helpdesk"
-    RABBITMQ_HOST: "rabbitmq.mini-helpdesk.svc.cluster.local"
+    DJANGO_SETTINGS_MODULE: "tixy_backend.settings"
+
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    DB_NAME: helpdesk
+    DB_USER: appuser
+
+    RABBITMQ_HOST: rabbitmq.mini-helpdesk.svc.cluster.local
     RABBITMQ_PORT: "5672"
     RABBITMQ_VHOST: "/"
 
+  secrets:
+    SECRET_KEY: ref+vault://minihelpdesk/backend#SECRET_KEY
+    DB_PASSWORD: ref+vault://minihelpdesk/postgres#POSTGRES_PASSWORD
+    RABBITMQ_USER: ref+vault://minihelpdesk/rabbitmq#RABBITMQ_USER
+    RABBITMQ_PASSWORD: ref+vault://minihelpdesk/rabbitmq#RABBITMQ_PASSWORD
+
 postgres:
   enabled: true
-  image: postgres:16
-  serviceName: postgres-service
+
+  image:
+    repository: postgres
+    tag: "16"
+
+  serviceName: postgres
   port: 5432
   storage: 1Gi
-  db:
-    name: helpdesk
-    user: appuser
-    password: apppass
+
+  env:
+    POSTGRES_DB: helpdesk
+    POSTGRES_USER: appuser
+
+  secrets:
+    POSTGRES_PASSWORD: ref+vault://minihelpdesk/postgres#POSTGRES_PASSWORD
 
 ingress:
   enabled: true
@@ -37,6 +60,7 @@ ingress:
 celery:
   worker:
     replicas: 1
+
   flower:
     enabled: true
     port: 5555

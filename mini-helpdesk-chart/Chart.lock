@@ -1,0 +1,15 @@
+dependencies:
+- name: backend
+  repository: file://charts/backend
+  version: 0.1.0
+- name: postgres
+  repository: file://charts/postgres
+  version: 0.1.0
+- name: celery-worker
+  repository: file://charts/celery-worker
+  version: 0.1.0
+- name: flower
+  repository: file://charts/flower
+  version: 0.1.0
+digest: sha256:726273f90121ec008f3a400f747c60a9ed9b2ac6c8fbc659563bf58b6c73a9fc
+generated: "2025-12-30T19:43:38.7653789+03:00"

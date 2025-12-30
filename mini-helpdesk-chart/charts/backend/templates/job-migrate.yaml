@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "backend.fullname" . }}-migrate
+  labels:
+{{ include "backend.labels" . | indent 4 }}
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrate
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.envConfigMapName | default "backend-env" }}
+            - secretRef:
+                name: {{ .Values.envSecretName | default "backend-secret" }}
+          command: ["python", "manage.py", "migrate", "--noinput"]
