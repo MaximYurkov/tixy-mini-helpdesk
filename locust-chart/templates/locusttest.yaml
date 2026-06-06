@@ -1,0 +1,12 @@
+apiVersion: locust.io/v1
+kind: LocustTest
+metadata:
+  name: {{ .Values.testName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  image: locustio/locust:2.44.1
+  workers: {{ .Values.workers }}
+  args: "-f locustfile.py --host={{ .Values.targetHost }} --users={{ .Values.users }} --spawn-rate={{ .Values.spawnRate }} --run-time={{ .Values.runTime }}"
+  locustfile:
+    configMap:
+      name: {{ .Values.testName }}-locustfile

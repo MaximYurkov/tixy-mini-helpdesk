@@ -1,0 +1,12 @@
+testName: load-test-v2
+
+targetHost: "http://mini-helpdesk-backend.mini-helpdesk.svc.cluster.local:8000"
+
+users: 200
+spawnRate: 40
+runTime: "3m"
+workers: 2
+
+ingress:
+  enabled: true
+  host: locust.local
