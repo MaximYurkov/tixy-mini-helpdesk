@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/MaximYurkov/tixy-mini-helpdesk/compare/v1.0.0...v1.1.0) (2026-06-08)
+
+
+### Features
+
+* run ci pipeline on custom github runner ([4d40652](https://github.com/MaximYurkov/tixy-mini-helpdesk/commit/4d40652756eb866605ae947393d599057ea6e461))
+
 # 1.0.0 (2026-06-08)
 
 
