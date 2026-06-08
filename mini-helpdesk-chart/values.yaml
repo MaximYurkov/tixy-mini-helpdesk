@@ -19,6 +19,8 @@ backend:
     DJANGO_ALLOWED_HOSTS: "*"
     DJANGO_SETTINGS_MODULE: "tixy_backend.settings"
 
+    DATABASE_URL: "postgres://appuser:apppass@postgres:5432/helpdesk"
+
     DB_HOST: postgres
     DB_PORT: "5432"
     DB_NAME: helpdesk
@@ -40,30 +42,29 @@ backend:
 postgres:
   enabled: true
 
-  image:
-    repository: postgres
-    tag: "16"
-
+  image: postgres:16
   serviceName: postgres
   port: 5432
   storage: 1Gi
 
-  env:
-    POSTGRES_DB: helpdesk
-    POSTGRES_USER: appuser
-
-  secrets:
-    POSTGRES_PASSWORD: ref+vault://minihelpdesk/postgres#POSTGRES_PASSWORD
+  db:
+    name: helpdesk
+    user: appuser
+    password: apppass
 
 ingress:
   enabled: true
   host: mini-helpdesk.local
   path: /api
 
-celery:
-  worker:
-    replicas: 1
+celery-worker:
+  enabled: false
 
-  flower:
-    enabled: true
-    port: 5555
+flower:
+  enabled: false
+
+redis:
+  image:
+    repository: redis
+    tag: "7.2"
+    pullPolicy: IfNotPresent

@@ -26,3 +26,10 @@ spec:
             - secretRef:
                 name: {{ .Values.secretName }}
           command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+          resources:
+            requests:
+              cpu: "120m"
+              memory: "160Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
