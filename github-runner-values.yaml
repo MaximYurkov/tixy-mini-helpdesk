@@ -1,0 +1,10 @@
+githubConfigUrl: "https://github.com/MaximYurkov/tixy-mini-helpdesk"
+githubConfigSecret: "github-runner-secret"
+
+runnerScaleSetName: "arc-runner"
+
+minRunners: 1
+maxRunners: 3
+
+containerMode:
+  type: "dind"

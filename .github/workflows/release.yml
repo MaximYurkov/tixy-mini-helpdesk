@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner
 
     outputs:
       new_release_published: ${{ steps.semantic.outputs.new_release_published }}
@@ -44,7 +44,7 @@ jobs:
   docker:
     needs: release
     if: needs.release.outputs.new_release_published == 'true'
-    runs-on: ubuntu-latest
+    runs-on: arc-runner
 
     steps:
       - name: Checkout repository
